@@ -1,0 +1,15 @@
+.form-container {
+    position: relative;
+    top:20vh;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 #000;
+}
+
+.username-field {
+    margin-top: 15px;
+}
+
+.wrapper {
+    width: 60vw;
+}
