@@ -55,3 +55,15 @@
     position: relative;
     top: 25%;
 }
+
+.search-container {
+    position: relative;
+    margin: 0 auto;
+    top:3vh;
+    text-align: center;
+    width: 70vw;
+}
+
+#profiles {
+    width: 100%;
+}
