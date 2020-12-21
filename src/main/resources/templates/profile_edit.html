@@ -18,19 +18,45 @@
             <p class="text-center h3">Profile editing </p>
             <div class="form-group username-field">
                 <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
-                <input id="cur_username" th:field="*{username}" name="username" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Username">
+                <input id="cur_username" th:field="*{username}" name="username" type="text" class="form-control form-item" aria-describedby="emailHelp" placeholder="Username">
             </div>
             <div class="form-group">
                 <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
-                <input id="cur_first_name" th:field="*{firstName}" name="firstName" type="text" class="form-control" placeholder="First name">
+                <input id="cur_first_name" th:field="*{firstName}" name="firstName" type="text" class="form-control form-item" placeholder="First name">
             </div>
             <div class="form-group">
                 <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
-                <input id="cur_last_name" th:field="*{lastName}" name="lastName" type="text" class="form-control" placeholder="Last name">
+                <input id="cur_last_name" th:field="*{lastName}" name="lastName" type="text" class="form-control form-item" placeholder="Last name">
+            </div>
+            <div class="form-group">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input form-item" th:field="*{role}" type="radio" name="role" id="inlineRadio1" value="ADMIN">
+                    <label class="form-check-label" for="inlineRadio1" >ADMIN</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input form-item" th:field="*{role}" type="radio" name="role" id="inlineRadio2" value="USER">
+                    <label class="form-check-label" for="inlineRadio2">USER</label>
+                </div>
+            </div>
+            <span class="text-danger" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+            <div class="form-group">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input form-item" th:field="*{status}" type="radio" name="status" id="inlineRadio3" value="ACTIVE">
+                    <label class="form-check-label" for="inlineRadio3">ACTIVE</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input form-item" th:field="*{status}" type="radio" name="status" id="inlineRadio4" value="BANNED">
+                    <label class="form-check-label" for="inlineRadio4">BANNED</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input form-item" th:field="*{status}" type="radio" name="status" id="inlineRadio5" value="DELETED">
+                    <label class="form-check-label" for="inlineRadio5">DELETED</label>
+                </div>
             </div>
             <div id="save-btn" class="btns">
                 <button type="button" class="btn btn-light">Save</button>
             </div>
+
         </form>
     </div>
 </div>

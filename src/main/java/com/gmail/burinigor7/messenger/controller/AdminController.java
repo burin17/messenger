@@ -1,5 +1,6 @@
 package com.gmail.burinigor7.messenger.controller;
 
+import com.gmail.burinigor7.messenger.domain.Role;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.dto.EditProfileDTO;
 import com.gmail.burinigor7.messenger.service.ProfileService;
@@ -25,15 +26,20 @@ public class AdminController {
 
     @GetMapping("/profile/edit/{id}")
     public String editProfilePage(@PathVariable("id") User profile, Model model) {
-        model.addAttribute("profile", profile);
-        return "profile_edit";
+        if(profile.getRole() == Role.USER) {
+            model.addAttribute("profile", profile);
+            return "profile_edit";
+        } return "redirect:/profile/" + profile.getId();
     }
 
     @PostMapping("/profile/edit/{id}")
     public String editProfileAction(@Valid @ModelAttribute("profile") EditProfileDTO editProfileDTO,
-                                    @PathVariable("id") User profile,
-                                    BindingResult bindingResult,
-                                    Model model) {
-        return profileService.editUser(editProfileDTO, profile, bindingResult);
+                                    @PathVariable("id") User user,
+                                    BindingResult bindingResult) {
+        if(user.getRole() == Role.USER) {
+            editProfileDTO.setId(user.getId());
+            return profileService.editUser(editProfileDTO, user, bindingResult);
+        }
+        return "redirect:/profile/" + user.getId();
     }
 }

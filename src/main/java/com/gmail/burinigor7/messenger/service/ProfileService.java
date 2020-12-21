@@ -1,19 +1,14 @@
 package com.gmail.burinigor7.messenger.service;
 
+import com.gmail.burinigor7.messenger.domain.Role;
+import com.gmail.burinigor7.messenger.domain.Status;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.dto.EditProfileDTO;
 import com.gmail.burinigor7.messenger.exception.UserNotFoundException;
 import com.gmail.burinigor7.messenger.repository.UserRepository;
 import com.gmail.burinigor7.messenger.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -69,11 +64,18 @@ public class ProfileService {
         if(!editProfileDTO.getUsername().equals(profile.getUsername()) &&
                 userRepository.findByUsername(editProfileDTO.getUsername()).isPresent())
             bindingResult.rejectValue("username", "", "Username already in use");
+        if(editProfileDTO.getStatus() != Status.ACTIVE &&
+                editProfileDTO.getRole() == Role.ADMIN)
+            bindingResult.rejectValue("status", "", "Incorrect status for ADMIN role");
         if(bindingResult.hasErrors())
             return false;
         profile.setUsername(editProfileDTO.getUsername());
         profile.setFirstName(editProfileDTO.getFirstName());
         profile.setLastName(editProfileDTO.getLastName());
+        if(editProfileDTO.getRole() != null && editProfileDTO.getStatus() != null) {
+            profile.setRole(editProfileDTO.getRole());
+            profile.setStatus(editProfileDTO.getStatus());
+        }
         userRepository.save(profile);
         return true;
     }
