@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Component("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
+    private final static String ROLE_PREFIX = "ROLE_";
     private final UserRepository userRepository;
 
     @Autowired
@@ -28,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new SecurityUser(
                 user.getUsername(), user.getPassword(),
                 user.getStatus().equals(Status.ACTIVE),
-                Set.of(new SimpleGrantedAuthority(user.getRole().name()))
+                Set.of(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRole().name()))
         );
     }
 }

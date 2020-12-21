@@ -3,7 +3,10 @@ package com.gmail.burinigor7.messenger.rest;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class ProfileRestController {
     }
 
     @GetMapping("/piece")
-    public List<String> findByUsernamePiece(@RequestParam String piece) {
+    public List<User> findByUsernamePiece(@RequestParam String piece) {
         return profileService.getUsersByUsernamePiece(piece);
     }
 }

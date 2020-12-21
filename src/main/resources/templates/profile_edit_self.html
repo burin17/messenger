@@ -14,8 +14,8 @@
 <div class="d-flex" id="wrapper">
     <div th:replace="fragments/sidebar.html :: sidebar"></div>
     <div class="card-body container">
-        <form id="edit-form" class="form-container" method="post" th:action="@{|/admin/profile/edit/${profile.id}|}" th:object="${profile}">
-            <p class="text-center h3">Profile editing </p>
+        <form id="edit-form" class="form-container" method="post" th:action="@{/profile/edit}" th:object="${profile}">
+            <p class="text-center h3">Profile editing</p>
             <div class="form-group username-field">
                 <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                 <input id="cur_username" th:field="*{username}" name="username" type="text" class="form-control" aria-describedby="emailHelp" placeholder="Username">

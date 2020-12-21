@@ -10,11 +10,13 @@ const loadProfiles = async (piece) => {
         const url = new URL('http://localhost:8080/api/profiles/piece'),
             params = {'piece':piece};
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-        const usernames = await fetch(url)
+        const users = await fetch(url)
             .then(response => response.json());
-        profilesList.innerHTML = usernames
-            .map((username) => {
-                return `<li class="list-group-item">${username}</li>`;
+        profilesList.innerHTML = users
+            .map((user) => {
+                return `<li class="list-group-item">
+                            <a href="/profile/${user.id}" class="profile-link">${user.username}</a>
+                        </li>`;
             }).join('');
     } catch (err) {
         console.log(err);
