@@ -38,7 +38,6 @@ public class RegistrationController {
                                       BindingResult bindingResult) {
         registrationValidator.validate(registrationDTO, bindingResult);
         if(bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
             return "/registration";
         }
         userRepository.save(registrationDTO.toUser(passwordEncoder));

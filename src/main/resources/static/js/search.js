@@ -7,11 +7,14 @@ searchBar.addEventListener('keyup', (e) => {
 
 const loadProfiles = async (piece) => {
     try {
-        const profiles = await fetch('http://localhost:8080/api/profiles/' + piece)
+        const url = new URL('http://localhost:8080/api/profiles/piece'),
+            params = {'piece':piece};
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        const usernames = await fetch(url)
             .then(response => response.json());
-        profilesList.innerHTML = profiles
-            .map((profile) => {
-                return `<li class="list-group-item">${profile.username}</li>`;
+        profilesList.innerHTML = usernames
+            .map((username) => {
+                return `<li class="list-group-item">${username}</li>`;
             }).join('');
     } catch (err) {
         console.log(err);
