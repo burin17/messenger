@@ -24,7 +24,7 @@
                     <a th:if="${isSelf}" th:href="@{/profile/edit}" class="btn btn-primary edit-btn">
                         Edit
                     </a>
-                    <a th:unless="${isSelf}" th:href="@{/profile/self}" class="btn btn-success edit-btn">
+                    <a th:unless="${isSelf}" th:href="@{|/dialog/${profile.id}|}" class="btn btn-success edit-btn">
                         Message
                     </a>
                 </div>
