@@ -29,10 +29,10 @@ public class MessageService {
                 recipient.getId());
     }
 
-    public void saveMessage(User recipient,
+    public Message saveMessage(User recipient,
                             Principal principal,
                             String text) {
-        messageRepository.save(
+        return messageRepository.save(
                 new Message(
                         profileService.selfProfile(principal),
                         recipient,
