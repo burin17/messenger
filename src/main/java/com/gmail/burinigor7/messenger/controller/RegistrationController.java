@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 @RequestMapping("/registration")
@@ -19,6 +21,7 @@ public class RegistrationController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RegistrationValidator registrationValidator;
+    private final Set<String> usernames = ConcurrentHashMap.newKeySet();
 
     @Autowired
     public RegistrationController(UserRepository userRepository,
@@ -37,11 +40,16 @@ public class RegistrationController {
     @PostMapping
     public String processRegistration(@Valid @ModelAttribute("form") RegistrationDTO registrationDTO,
                                       BindingResult bindingResult) {
+        if(!usernames.add(registrationDTO.getUsername())) {
+            bindingResult.rejectValue("username", "", "Username already in use");
+            return "/registration";
+        }
         registrationValidator.validate(registrationDTO, bindingResult);
         if(bindingResult.hasErrors()) {
             return "/registration";
         }
         userRepository.save(registrationDTO.toUser(passwordEncoder));
+        usernames.remove(registrationDTO.getUsername());
         return "redirect:/login";
     }
 }

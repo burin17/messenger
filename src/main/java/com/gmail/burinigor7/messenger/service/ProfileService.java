@@ -25,6 +25,7 @@ public class ProfileService {
     }
 
     public User selfProfile(Principal principal) {
+        System.out.println(principal.getClass());
         String username = principal.getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));

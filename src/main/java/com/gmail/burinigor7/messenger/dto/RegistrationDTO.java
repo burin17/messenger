@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class RegistrationDTO {
 
     @NotBlank(message = "Incorrect username")
-    @Size(min = 5, message = "Length must be more than 5")
+    @Size(min = 5, message = "Length must be more than 4")
     private String username;
 
     @NotBlank(message = "Must not contain only spaces")
@@ -22,7 +22,7 @@ public class RegistrationDTO {
     @NotBlank(message = "Must not contain only spaces")
     private String lastName;
 
-    @Size(min = 5, message = "Length must be more than 5")
+    @Size(min = 5, message = "Length must be more than 4")
     private String password;
 
     private String passwordConfirmation;

@@ -2,14 +2,18 @@ package com.gmail.burinigor7.messenger.controller;
 
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.dto.EditProfileDTO;
+import com.gmail.burinigor7.messenger.exception.UserNotFoundException;
 import com.gmail.burinigor7.messenger.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -44,8 +48,7 @@ public class ProfileController {
     @PostMapping("/edit")
     public String editProfileAction(@Valid @ModelAttribute("profile") EditProfileDTO editProfileDTO,
                                     BindingResult bindingResult,
-                                    Authentication authentication,
-                                    Model model) {
+                                    Authentication authentication) {
         return profileService.editUser(authentication, editProfileDTO, bindingResult);
     }
 
@@ -57,5 +60,13 @@ public class ProfileController {
         model.addAttribute("isSelf", authenticated.getUsername().equals(profile.getUsername()));
         model.addAttribute("profile", profile);
         return "profile";
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public String redirectToLogin(HttpServletRequest httpServletRequest,
+                                  HttpServletResponse httpServletResponse,
+                                  Authentication authentication) {
+        new SecurityContextLogoutHandler().logout(httpServletRequest, httpServletResponse, authentication);
+        return "/login";
     }
 }
