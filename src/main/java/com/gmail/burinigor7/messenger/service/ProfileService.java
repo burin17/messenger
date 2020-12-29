@@ -10,6 +10,10 @@ import com.gmail.burinigor7.messenger.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -18,10 +22,13 @@ import java.util.List;
 @Service
 public class ProfileService {
     private final UserRepository userRepository;
+    private final SessionRegistryImpl sessionRegistry;
 
     @Autowired
-    public ProfileService(UserRepository userRepository) {
+    public ProfileService(UserRepository userRepository,
+                          SessionRegistryImpl sessionRegistry){
         this.userRepository = userRepository;
+        this.sessionRegistry = sessionRegistry;
     }
 
     public User selfProfile() {
@@ -83,6 +90,9 @@ public class ProfileService {
             profile.setStatus(editProfileDTO.getStatus());
         }
         userRepository.save(profile);
+        if(profile.getStatus() != Status.ACTIVE)
+            sessionRegistry.getAllSessions(new SecurityUser(profile.getUsername()), false)
+                    .forEach(SessionInformation::expireNow);
         return true;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ public class ProfileController {
 
     @GetMapping("/self")
     public String selfProfilePage(Model model) {
+        System.out.println(RequestContextHolder.currentRequestAttributes().getSessionId());
         model.addAttribute("profile", profileService.selfProfile());
         model.addAttribute("isSelf", true);
         return "profile";

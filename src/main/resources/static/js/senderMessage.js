@@ -38,19 +38,21 @@ function connect() {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/messages/' + sender, function(resp) {
             let message = JSON.parse(resp.body);
-            messages.innerHTML +=
-                `<div class="row message-body" >
-            <div class="col message-main-receiver">
-                <div class="receiver">
-                    <div class="message-text">
-                        ${message.text}
-                    </div>
-                    <span class="message-time">
-                        ${message.date}
-                    </span>
-                </div>
-            </div>
-        </div>`
+            if(message.sender.id == recipient) {
+                messages.innerHTML +=
+                    `<div class="row message-body" >
+                        <div class="col message-main-receiver">
+                            <div class="receiver">
+                                <div class="message-text">
+                                    ${message.text}
+                                </div>
+                                <span class="message-time">
+                                    ${message.date}
+                                </span>
+                            </div>
+                        </div>
+                    </div>`
+            }
         });
     });
 }
