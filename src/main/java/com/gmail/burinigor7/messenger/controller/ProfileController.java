@@ -28,8 +28,8 @@ public class ProfileController {
     }
 
     @GetMapping("/self")
-    public String selfProfilePage(Principal principal, Model model) {
-        model.addAttribute("profile", profileService.selfProfile(principal));
+    public String selfProfilePage(Model model) {
+        model.addAttribute("profile", profileService.selfProfile());
         model.addAttribute("isSelf", true);
         return "profile";
     }
@@ -40,8 +40,8 @@ public class ProfileController {
     }
 
     @GetMapping("/edit")
-    public String editProfilePage(Principal principal, Model model) {
-        model.addAttribute("profile", profileService.selfProfile(principal));
+    public String editProfilePage(Model model) {
+        model.addAttribute("profile", profileService.selfProfile());
         return "profile_edit_self";
     }
 
@@ -54,9 +54,8 @@ public class ProfileController {
 
     @GetMapping("/{id}")
     public String profilePage(@PathVariable("id") User profile,
-                              Principal principal,
                               Model model) {
-        User authenticated = profileService.selfProfile(principal);
+        User authenticated = profileService.selfProfile();
         model.addAttribute("isSelf", authenticated.getUsername().equals(profile.getUsername()));
         model.addAttribute("profile", profile);
         return "profile";

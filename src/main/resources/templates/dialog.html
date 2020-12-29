@@ -10,7 +10,7 @@ xmlns:th="http://www.thymeleaf.org">
     <link th:href="@{/css/dialog.css}" rel="stylesheet">
     <link th:href="@{/css/profile.css}" rel="stylesheet">
 </head>
-<body>
+<body onload="connect()">
 <div class="d-flex" id="wrapper">
     <div th:replace="fragments/sidebar :: sidebar"></div>
     <div class="conversation">
@@ -55,10 +55,14 @@ xmlns:th="http://www.thymeleaf.org">
 </div>
 <script>
     let recipient = [[${recipient.id}]];
+    let sender = [[${sender.id}]];
 </script>
 
 <script th:src="@{/js/senderMessage.js}"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 </body>
 </html>

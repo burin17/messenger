@@ -6,7 +6,10 @@ import com.gmail.burinigor7.messenger.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
@@ -22,11 +25,9 @@ public class MessageController {
     }
 
     @GetMapping("/{id}")
-    public String dialogPage(@PathVariable("id") User recipient,
-                             Principal principal, Model model) {
-        User sender = messageService.selfProfile(principal);
-        List<Message> dialog = messageService.getDialog(principal, recipient);
-        System.out.println(dialog);
+    public String dialogPage(@PathVariable("id") User recipient, Model model) {
+        User sender = messageService.selfProfile();
+        List<Message> dialog = messageService.getDialog(recipient);
         model.addAttribute("messages", dialog);
         model.addAttribute("sender", sender);
         model.addAttribute("recipient", recipient);
@@ -35,10 +36,9 @@ public class MessageController {
 
     @PostMapping("/send/{id}")
     public String sendAction(@PathVariable("id") User recipient,
-                             Principal principal, String text,
+                             String text,
                              Model model) {
-        messageService.saveMessage(recipient, principal, text);
-        return dialogPage(recipient, principal, model);
+        messageService.saveMessage(recipient, text);
+        return dialogPage(recipient, model);
     }
-
 }

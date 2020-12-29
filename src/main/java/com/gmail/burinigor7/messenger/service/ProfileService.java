@@ -9,10 +9,10 @@ import com.gmail.burinigor7.messenger.repository.UserRepository;
 import com.gmail.burinigor7.messenger.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -24,11 +24,16 @@ public class ProfileService {
         this.userRepository = userRepository;
     }
 
-    public User selfProfile(Principal principal) {
-        System.out.println(principal.getClass());
-        String username = principal.getName();
+    public User selfProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
+    }
+
+    public User user(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public List<User> getUsersByUsernamePiece(String piece) {
@@ -45,7 +50,7 @@ public class ProfileService {
 
     public String editUser(Authentication authentication, EditProfileDTO editProfileDTO,
                            BindingResult bindingResult) {
-        User user = selfProfile(authentication);
+        User user = selfProfile();
         if(!updateUser(user, editProfileDTO, bindingResult))
             return "/profile_edit_self";
         ((SecurityUser)authentication.getPrincipal()).setUsername(user.getUsername());
