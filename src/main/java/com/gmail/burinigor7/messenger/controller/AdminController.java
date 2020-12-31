@@ -5,7 +5,7 @@ import com.gmail.burinigor7.messenger.domain.Message;
 import com.gmail.burinigor7.messenger.domain.Role;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.dto.EditProfileDTO;
-import com.gmail.burinigor7.messenger.repository.ComplaintRepository;
+import com.gmail.burinigor7.messenger.service.ComplaintService;
 import com.gmail.burinigor7.messenger.service.MessageService;
 import com.gmail.burinigor7.messenger.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,15 @@ import java.util.List;
 public class AdminController {
     private final ProfileService profileService;
     private final MessageService messageService;
-
+    private final ComplaintService complaintService;
 
     @Autowired
     public AdminController(ProfileService profileService,
-                           MessageService messageService) {
+                           MessageService messageService,
+                           ComplaintService complaintService) {
         this.profileService = profileService;
         this.messageService = messageService;
+        this.complaintService = complaintService;
     }
 
     @GetMapping("/profile/edit/{id}")
@@ -66,8 +68,21 @@ public class AdminController {
 
     @GetMapping("/complaints")
     public String complaints(Model model) {
-        List<Complaint> complaints = profileService.allComplaints();
+        List<Complaint> complaints = complaintService.allComplaints();
         model.addAttribute("complaints", complaints);
         return "complaints";
+    }
+
+    @PostMapping("/complaints/reject/{id}")
+    public String rejectComplaint(@PathVariable("id") Complaint complaint) {
+        complaintService.deleteComplaint(complaint);
+        return "redirect:/admin/complaints";
+    }
+
+    @PostMapping("/complaints/satisfy/{id}")
+    public String satisfyComplaint(@PathVariable("id") Complaint complaint) {
+        profileService.banUser(complaint.getTarget());
+        complaintService.deleteComplaint(complaint);
+        return "redirect:/admin/complaints";
     }
 }

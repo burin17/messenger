@@ -11,6 +11,7 @@ import com.gmail.burinigor7.messenger.repository.ComplaintRepository;
 import com.gmail.burinigor7.messenger.repository.UserRepository;
 import com.gmail.burinigor7.messenger.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
@@ -42,9 +43,6 @@ public class ProfileService {
                 .orElseThrow(AuthException::new);
     }
 
-    public List<Complaint> allComplaints() {
-        return complaintRepository.findAll();
-    }
 
     public User user(Long id) {
         return userRepository.findById(id)
@@ -99,12 +97,22 @@ public class ProfileService {
         }
         userRepository.save(profile);
         if(profile.getStatus() != Status.ACTIVE) {
-            sessionRegistry.getAllSessions(new SecurityUser(profile.getUsername()), false)
-                    .forEach(SessionInformation::expireNow);
-            List<Complaint> complaints = complaintRepository.findAllByTarget(profile);
-            for(Complaint complaint : complaints)
-                complaintRepository.delete(complaint);
+            sessionAndComplaintsDrop(profile);
         }
         return true;
+    }
+
+    public void banUser(User user) {
+        user.setStatus(Status.BANNED);
+        userRepository.save(user);
+        sessionAndComplaintsDrop(user);
+    }
+
+    private void sessionAndComplaintsDrop(User profile) {
+        sessionRegistry.getAllSessions(new SecurityUser(profile.getUsername()), false)
+                .forEach(SessionInformation::expireNow);
+        List<Complaint> complaints = complaintRepository.findAllByTarget(profile);
+        for(Complaint complaint : complaints)
+            complaintRepository.delete(complaint);
     }
 }

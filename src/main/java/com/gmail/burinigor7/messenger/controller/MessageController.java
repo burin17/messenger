@@ -4,6 +4,7 @@ import com.gmail.burinigor7.messenger.domain.Message;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,5 +43,9 @@ public class MessageController {
                              Model model) {
         messageService.saveMessage(recipient, text);
         return dialogPage(recipient, model);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new BCryptPasswordEncoder().encode("ivan"));
     }
 }

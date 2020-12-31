@@ -21,11 +21,23 @@
                     <td>Id</td>
                     <td>Complainant</td>
                     <td>Target</td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr th:each="complaint : ${complaints}">
                     <td th:text="${complaint.id}"></td>
                     <td th:text="${complaint.holder.id}">Complainant</td>
                     <td th:text="${complaint.target.id}">Target</td>
+                    <td>
+                        <form th:action="@{|/admin/complaints/reject/${complaint.id}|}" method="post">
+                            <input type="submit" value="reject">
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{|/admin/complaints/satisfy/${complaint.id}|}" method="post">
+                            <input type="submit" value="satisfy">
+                        </form>
+                    </td>
                 </tr>
             </th:block>
         </table>

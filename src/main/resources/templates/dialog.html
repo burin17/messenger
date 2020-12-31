@@ -21,9 +21,8 @@ xmlns:th="http://www.thymeleaf.org">
                 </a>
             </div>
         </div>
-
+        <br><br>
         <div class="message" id="conversation">
-
             <div th:each="message : ${messages}" class="row message-body" >
                 <div th:if="${message.getSender().id.equals(sender.id)}" class="col message-main-sender">
                     <div class="sender">

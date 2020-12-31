@@ -18,12 +18,12 @@ public class Message {
     private Long id;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "sender_id", referencedColumnName = "id")
-    private User sender;
-
-    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "recipient_id", referencedColumnName = "id")
     private User recipient;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "sender_id", referencedColumnName = "id")
+    private User sender;
 
     @Column(name = "send_date")
     private Date sendDate;
