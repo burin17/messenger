@@ -8,6 +8,7 @@ import com.gmail.burinigor7.messenger.exception.UserNotFoundException;
 import com.gmail.burinigor7.messenger.service.ComplaintService;
 import com.gmail.burinigor7.messenger.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;

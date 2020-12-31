@@ -26,6 +26,10 @@ public class MessageService {
                 recipient.getId());
     }
 
+    public List<Message> getDialog(User user1, User user2) {
+        return messageRepository.getDialog(user1.getId(), user2.getId());
+    }
+
     public Message saveMessage(User recipient, String text) {
         return messageRepository.save(
                 new Message(

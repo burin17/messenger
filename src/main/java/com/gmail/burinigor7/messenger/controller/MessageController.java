@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -26,6 +25,9 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public String dialogPage(@PathVariable("id") User recipient, Model model) {
+        if(recipient.getId().equals(messageService.selfProfile().getId())) {
+            return "redirect:/profile/self";
+        }
         User sender = messageService.selfProfile();
         List<Message> dialog = messageService.getDialog(recipient);
         model.addAttribute("messages", dialog);

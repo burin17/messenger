@@ -1,11 +1,13 @@
 package com.gmail.burinigor7.messenger.service;
 
+import com.gmail.burinigor7.messenger.domain.Complaint;
 import com.gmail.burinigor7.messenger.domain.Role;
 import com.gmail.burinigor7.messenger.domain.Status;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.dto.EditProfileDTO;
 import com.gmail.burinigor7.messenger.exception.AuthException;
 import com.gmail.burinigor7.messenger.exception.UserNotFoundException;
+import com.gmail.burinigor7.messenger.repository.ComplaintRepository;
 import com.gmail.burinigor7.messenger.repository.UserRepository;
 import com.gmail.burinigor7.messenger.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,15 @@ import java.util.List;
 public class ProfileService {
     private final UserRepository userRepository;
     private final SessionRegistryImpl sessionRegistry;
+    private final ComplaintRepository complaintRepository;
 
     @Autowired
     public ProfileService(UserRepository userRepository,
-                          SessionRegistryImpl sessionRegistry){
+                          SessionRegistryImpl sessionRegistry,
+                          ComplaintRepository complaintRepository) {
         this.userRepository = userRepository;
         this.sessionRegistry = sessionRegistry;
+        this.complaintRepository = complaintRepository;
     }
 
     public User selfProfile() {
@@ -35,6 +40,10 @@ public class ProfileService {
         String username = authentication.getName();
         return userRepository.findByUsername(username)
                 .orElseThrow(AuthException::new);
+    }
+
+    public List<Complaint> allComplaints() {
+        return complaintRepository.findAll();
     }
 
     public User user(Long id) {
@@ -89,9 +98,13 @@ public class ProfileService {
             profile.setStatus(editProfileDTO.getStatus());
         }
         userRepository.save(profile);
-        if(profile.getStatus() != Status.ACTIVE)
+        if(profile.getStatus() != Status.ACTIVE) {
             sessionRegistry.getAllSessions(new SecurityUser(profile.getUsername()), false)
                     .forEach(SessionInformation::expireNow);
+            List<Complaint> complaints = complaintRepository.findAllByTarget(profile);
+            for(Complaint complaint : complaints)
+                complaintRepository.delete(complaint);
+        }
         return true;
     }
 }
