@@ -10,7 +10,7 @@
     <link th:href="@{/css/profile.css}" rel="stylesheet">
 </head>
 <body>
-<div th:fragment="profile (profile, isSelf)">
+<div th:fragment="profile (profile, isSelf, complaintPossibility)">
     <div class="d-flex" id="wrapper">
         <div th:replace="fragments/sidebar.html :: sidebar"></div>
         <div class="card-body container">
@@ -26,6 +26,9 @@
                     </a>
                     <a th:unless="${isSelf}" th:href="@{|/dialog/${profile.id}|}" class="btn btn-success edit-btn">
                         Message
+                    </a>
+                    <a th:if="${complaintPossibility}" class="btn btn-danger edit-btn" id="complaint-btn">
+                        Complaint
                     </a>
                 </div>
             </div>

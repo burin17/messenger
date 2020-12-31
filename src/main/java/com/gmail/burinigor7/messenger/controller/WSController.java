@@ -1,7 +1,6 @@
 package com.gmail.burinigor7.messenger.controller;
 
 import com.gmail.burinigor7.messenger.domain.Message;
-import com.gmail.burinigor7.messenger.domain.MessageWSPayload;
 import com.gmail.burinigor7.messenger.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

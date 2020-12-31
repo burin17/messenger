@@ -1,7 +1,7 @@
 package com.gmail.burinigor7.messenger.service;
 
 import com.gmail.burinigor7.messenger.domain.Message;
-import com.gmail.burinigor7.messenger.domain.MessageWSPayload;
+import com.gmail.burinigor7.messenger.ws.payload.MessageWS;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +35,12 @@ public class MessageService {
                 ));
     }
 
-    public Message saveOwnMessage(MessageWSPayload messageWSPayload) {
+    public Message saveOwnMessage(MessageWS messageWS) {
         return messageRepository.save(
                 new Message(
-                        profileService.user(messageWSPayload.getSenderId()),
-                        profileService.user(messageWSPayload.getRecipientId()),
-                        messageWSPayload.getText()
+                        profileService.user(messageWS.getSenderId()),
+                        profileService.user(messageWS.getRecipientId()),
+                        messageWS.getText()
                 )
         );
     }

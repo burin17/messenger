@@ -4,6 +4,7 @@ import com.gmail.burinigor7.messenger.domain.Role;
 import com.gmail.burinigor7.messenger.domain.Status;
 import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.dto.EditProfileDTO;
+import com.gmail.burinigor7.messenger.exception.AuthException;
 import com.gmail.burinigor7.messenger.exception.UserNotFoundException;
 import com.gmail.burinigor7.messenger.repository.UserRepository;
 import com.gmail.burinigor7.messenger.security.SecurityUser;
@@ -12,8 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -35,7 +34,7 @@ public class ProfileService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(username));
+                .orElseThrow(AuthException::new);
     }
 
     public User user(Long id) {
