@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -51,5 +52,13 @@ public class MessageService {
 
     public User selfProfile() {
         return profileService.selfProfile();
+    }
+
+    public List<User> usersWithDialog() {
+        User authenticated = selfProfile();
+        List<Dialog> dialogs = dialogRepository.findAllForUser(authenticated.getId());
+        return dialogs.stream()
+                .map(dialog -> dialog.getUser1().getId().equals(authenticated.getId()) ? dialog.getUser2() : dialog.getUser1())
+                .collect(Collectors.toList());
     }
 }

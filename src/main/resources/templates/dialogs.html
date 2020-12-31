@@ -13,10 +13,12 @@
 <body>
 <div class="d-flex" id="wrapper">
     <div th:replace="fragments/sidebar :: sidebar"></div>
-    <div>
-        <h3>Dialogs: </h3>
+    <div id="dialogs-wrapper">
+        <h3 class="display-3">Dialogs: </h3>
         <ul class="list-group" id="profiles">
-
+            <li th:each="user : ${users}" class="list-group-item">
+                <a th:href="@{|/dialog/${user.id}|}" th:text="${user.username}" class="profile-link"></a>
+            </li>
         </ul>
     </div>
 </div>

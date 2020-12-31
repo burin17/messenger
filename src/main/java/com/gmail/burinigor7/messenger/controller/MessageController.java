@@ -45,7 +45,9 @@ public class MessageController {
         return dialogPage(recipient, model);
     }
 
-    public static void main(String[] args) {
-        System.out.println(new BCryptPasswordEncoder().encode("ivan"));
+    @GetMapping("/all")
+    public String usersWithDialog(Model model) {
+        model.addAttribute("users", messageService.usersWithDialog());
+        return "dialogs";
     }
 }

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface DialogRepository extends JpaRepository<Dialog, Long> {
     @Query(value =  "select * " +
                     "from dialogs d " +
@@ -14,4 +16,10 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
             nativeQuery = true)
     Dialog findByUsers(@Param("user1") User user1,
                        @Param("user2") User user2);
+
+    @Query(value =  "select * " +
+            "from dialogs d " +
+            "where d.user1 = :user or d.user2 = :user",
+            nativeQuery = true)
+    List<Dialog> findAllForUser(@Param("user") Long userId);
 }
