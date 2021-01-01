@@ -31,10 +31,16 @@ public class Message {
     @Column(name = "text")
     private String text;
 
-    public Message(User sender, User recipient, String text) {
+    @ManyToOne
+    @JoinColumn(name = "dialog_id")
+    private Dialog dialog;
+
+    public Message(User sender, User recipient,
+                   String text, Dialog dialog) {
         this.sender = sender;
         this.recipient = recipient;
         this.text = text;
+        this.dialog = dialog;
     }
 
     public String getDate() {

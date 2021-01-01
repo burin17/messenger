@@ -19,7 +19,6 @@ public class MessageRestController {
     @PostMapping("/send/{id}")
     public Message send(@PathVariable("id") User recipient,
                         @RequestParam String text) {
-
         return messageService.saveMessage(recipient, text);
     }
 }

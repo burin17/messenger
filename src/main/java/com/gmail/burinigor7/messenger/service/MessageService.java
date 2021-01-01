@@ -3,7 +3,6 @@ package com.gmail.burinigor7.messenger.service;
 import com.gmail.burinigor7.messenger.domain.Dialog;
 import com.gmail.burinigor7.messenger.domain.Message;
 import com.gmail.burinigor7.messenger.domain.User;
-import com.gmail.burinigor7.messenger.repository.DialogRepository;
 import com.gmail.burinigor7.messenger.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +14,15 @@ import java.util.stream.Collectors;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final ProfileService profileService;
-    private final DialogRepository dialogRepository;
+    private final DialogService dialogService;
 
     @Autowired
     public MessageService(MessageRepository messageRepository,
                           ProfileService profileService,
-                          DialogRepository dialogRepository) {
+                          DialogService dialogService) {
         this.messageRepository = messageRepository;
         this.profileService = profileService;
-        this.dialogRepository = dialogRepository;
+        this.dialogService = dialogService;
     }
 
     public List<Message> getDialog(User recipient) {
@@ -37,12 +36,13 @@ public class MessageService {
     }
 
     public Message saveMessage(User recipient, String text) {
-        User authenticated = profileService.selfProfile();
-        Dialog dialog = dialogRepository.findByUsers(authenticated, recipient);
-        if(dialog == null)
-            dialogRepository.save(new Dialog(authenticated, recipient));
         return messageRepository.save(
-                new Message(authenticated, recipient, text));
+                new Message(
+                        profileService.selfProfile(),
+                        recipient, text,
+                        dialogService.dialog(recipient)
+                )
+        );
     }
 
     public Message message(Long messageId) {
@@ -56,7 +56,7 @@ public class MessageService {
 
     public List<User> usersWithDialog() {
         User authenticated = selfProfile();
-        List<Dialog> dialogs = dialogRepository.findAllForUser(authenticated.getId());
+        List<Dialog> dialogs = dialogService.findAllForUser();
         return dialogs.stream()
                 .map(dialog -> dialog.getUser1().getId().equals(authenticated.getId()) ? dialog.getUser2() : dialog.getUser1())
                 .collect(Collectors.toList());

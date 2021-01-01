@@ -26,7 +26,7 @@ const sendMessage = async () => {
             </div>
         </div>`
     textarea.value = "";
-    stompClient.send("/chat/" + recipient, {}, JSON.stringify(message.id));
+    stompClient.send("/chat/" + message.dialog.id, {}, JSON.stringify(message.id));
 }
 
 let stompClient = null;
@@ -35,8 +35,7 @@ function connect() {
     let socket = new SockJS('/chat');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/messages/' + sender, function(resp) {
+        stompClient.subscribe('/topic/messages/' + dialog, function(resp) {
             let message = JSON.parse(resp.body);
             if(message.sender.id == recipient) {
                 messages.innerHTML +=

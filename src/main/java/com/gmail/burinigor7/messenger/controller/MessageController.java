@@ -2,6 +2,7 @@ package com.gmail.burinigor7.messenger.controller;
 
 import com.gmail.burinigor7.messenger.domain.Message;
 import com.gmail.burinigor7.messenger.domain.User;
+import com.gmail.burinigor7.messenger.service.DialogService;
 import com.gmail.burinigor7.messenger.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,10 +19,13 @@ import java.util.List;
 @RequestMapping("/dialog")
 public class MessageController {
     private final MessageService messageService;
+    private final DialogService dialogService;
 
     @Autowired
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService,
+                             DialogService dialogService) {
         this.messageService = messageService;
+        this.dialogService = dialogService;
     }
 
     @GetMapping("/{id}")
@@ -34,6 +38,7 @@ public class MessageController {
         model.addAttribute("messages", dialog);
         model.addAttribute("sender", sender);
         model.addAttribute("recipient", recipient);
+        model.addAttribute("dialog", dialogService.dialog(recipient).getId());
         return "dialog";
     }
 

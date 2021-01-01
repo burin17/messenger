@@ -24,7 +24,6 @@ public class WSController {
     @MessageMapping("/chat/{id}")
     public void sendMessage(@DestinationVariable Long id,
                             @Payload Long messageId) {
-        System.out.println("handling send message: " + messageId + " to: " + id);
         Message saved = messageService.message(messageId);
         simpMessagingTemplate.convertAndSend("/topic/messages/" + id, saved);
     }
