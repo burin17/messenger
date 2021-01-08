@@ -128,7 +128,7 @@
     padding-bottom: 0 !important;
 }
 
-.message-time {
+.message-footnote {
     margin-left: 5px;
     font-size: 12px;
     text-align: right;
@@ -159,7 +159,7 @@
 }
 
 .reply {
-    height: 60px;
+    height: 110px;
     width: 100%;
     background-color: #eaeaea;
     padding: 10px !important;
@@ -197,4 +197,19 @@
 
 .reply-label {
     margin-top: 7px;
+}
+.file-attach {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    top: 10px;
+    left: 5px;
+}
+
+#file-name {
+    margin-right: 20px;
+}
+
+.file-ref:hover {
+    cursor: pointer;
 }

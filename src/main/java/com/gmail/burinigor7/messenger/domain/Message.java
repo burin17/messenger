@@ -2,7 +2,6 @@ package com.gmail.burinigor7.messenger.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
@@ -35,6 +34,11 @@ public class Message {
     @JoinColumn(name = "dialog_id")
     private Dialog dialog;
 
+    @Column(name = "file_name")
+    private String fileName;
+
+    private String originalFileName;
+
     public Message(User sender, User recipient,
                    String text, Dialog dialog) {
         this.sender = sender;
@@ -48,8 +52,21 @@ public class Message {
                 .format(sendDate);
     }
 
+    public String getOriginalFileName() {
+        if(fileName != null)
+            return fileName.substring(fileName.indexOf('_') + 1);
+        return null;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+        this.originalFileName = fileName.substring(fileName.indexOf('_') + 1);
+    }
+
     @PrePersist
     public void prePersistActions() {
         sendDate = new Date();
     }
+
+
 }

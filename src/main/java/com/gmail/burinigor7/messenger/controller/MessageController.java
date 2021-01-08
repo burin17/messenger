@@ -5,14 +5,12 @@ import com.gmail.burinigor7.messenger.domain.User;
 import com.gmail.burinigor7.messenger.service.DialogService;
 import com.gmail.burinigor7.messenger.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -39,14 +37,16 @@ public class MessageController {
         model.addAttribute("sender", sender);
         model.addAttribute("recipient", recipient);
         model.addAttribute("dialog", dialogService.dialog(recipient).getId());
+
         return "dialog";
     }
 
     @PostMapping("/send/{id}")
     public String sendAction(@PathVariable("id") User recipient,
+                             @RequestParam MultipartFile file,
                              String text,
-                             Model model) {
-        messageService.saveMessage(recipient, text);
+                             Model model) throws IOException {
+        messageService.saveMessage(recipient, text, file);
         return dialogPage(recipient, model);
     }
 
