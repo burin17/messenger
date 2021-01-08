@@ -7,28 +7,26 @@ let messages = document.getElementsByClassName('message-body');
 
 sendButton.addEventListener('click', (e) => {
     sendMessage();
-})
+});
 
 fileInput.addEventListener('change', (e) => {
     fileName.innerText = fileInput.files[0].name + "      ";
 });
 
-for(let message of messages) {
-    addFileLink(message);
-}
-
+addFileLink();
 
 const sendMessage = async () => {
-    const formDate = new FormData();
-    formDate.append('file', fileInput.files[0]);
-    const url = new URL("http://localhost:8080/api/dialog/send/" + recipient),
-        params = {'text':textarea.value};
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-    const message = await fetch(url, {method: 'POST', body: formDate})
-        .then(response => response.json());
-    if(message.fileName != null) {
-        conversation.innerHTML +=
-            `<div class="row message-body" >
+    if(textarea.value != "" || fileName.innerText != "") {
+        const formDate = new FormData();
+        formDate.append('file', fileInput.files[0]);
+        const url = new URL("http://localhost:8080/api/dialog/send/" + recipient),
+            params = {'text': textarea.value};
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        const message = await fetch(url, {method: 'POST', body: formDate})
+            .then(response => response.json());
+        if (message.fileName != null) {
+            conversation.innerHTML +=
+                `<div class="row message-body" >
                 <div class="col message-main-sender">
                     <div class="sender">
                         <div class="message-text">
@@ -44,10 +42,9 @@ const sendMessage = async () => {
                     </div>
                 </div>
             </div>`
-    }
-    else
-        conversation.innerHTML +=
-            `<div class="row message-body" >
+        } else
+            conversation.innerHTML +=
+                `<div class="row message-body" >
                 <div class="col message-main-sender">
                     <div class="sender">
                         <div class="message-text">
@@ -59,10 +56,12 @@ const sendMessage = async () => {
                     </div>
                 </div>
             </div>`
-    addFileLink();
-    textarea.value = "";
-    stompClient.send("/chat/" + message.dialog.id, {}, JSON.stringify(message.id));
-    fileInput.value = "";
+        addFileLink()
+        textarea.value = "";
+        stompClient.send("/chat/" + message.dialog.id, {}, JSON.stringify(message.id));
+        fileInput.value = "";
+        fileName.innerText = "";
+    }
 }
 
 let stompClient = null;
@@ -105,13 +104,13 @@ function connect() {
                                 </div>
                             </div>
                         </div>`
+                addFileLink();
             }
         });
     });
 }
 
 const downloadFile = async (fileName, originalName) => {
-    console.log(123);
     const url = new URL("http://localhost:8080/api/dialog/file/" + fileName);
     await fetch(url)
         .then(response => response.blob())
@@ -120,16 +119,27 @@ const downloadFile = async (fileName, originalName) => {
             var a = document.createElement('a');
             a.href = url;
             a.download = originalName;
-            document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+            document.body.appendChild(a);
             a.click();
             a.remove();
         });
 };
 
-function addFileLink(message) {
-    let link = message.querySelector('.file-ref');
-    if(link != null)
-        link.addEventListener('click', () => {
-            downloadFile(message.querySelector('.server-file-name').innerText, link.innerText);
-        });
+function addFileLink() {
+    for(let message of messages) {
+        let link = message.querySelector('.file-ref');
+        if(link != null)
+            link.addEventListener('click', () => {
+                downloadFile(message.querySelector('.server-file-name').innerText, link.innerText);
+            });
+    }
+}
+
+window.onload = function() {
+    textarea.addEventListener('input', () => {
+        sendButton.className = 'btn btn-primary col-sm-1';
+    });
+    fileInput.addEventListener('change', () => {
+        sendButton.className = 'btn btn-primary col-sm-1';
+    });
 }

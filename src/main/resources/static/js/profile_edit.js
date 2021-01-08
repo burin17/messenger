@@ -3,7 +3,6 @@ const saveBtn = document.getElementById("save-btn");
 
 window.onload = function() {
     for(let i = 0; i < formItems.length; ++i) {
-        console.log(formItems[i]);
         formItems[i].addEventListener('input', activateButton);
     }
 }
