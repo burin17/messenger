@@ -23,8 +23,9 @@ public class DialogService {
     public Dialog dialog(User recipient) {
         User authenticated = profileService.selfProfile();
         Dialog dialog = dialogRepository.findByUsers(authenticated, recipient);
-        if(dialog == null)
+        if (dialog == null) {
             return dialogRepository.save(new Dialog(authenticated, recipient));
+        }
         return dialog;
     }
 

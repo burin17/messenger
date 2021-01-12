@@ -14,11 +14,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
-    @Query(value =  "select * " +
-                    "from users u " +
-                    "where lower(u.username) like lower(concat(:p, '%')) " +
-                    "and u.status = 'ACTIVE' " +
-                    "limit 10",
+    @Query(value = "select * " +
+            "from users u " +
+            "where lower(u.username) like lower(concat(:p, '%')) " +
+            "and u.status = 'ACTIVE' " +
+            "limit 10",
             nativeQuery = true)
     List<User> findAllByPieceOfUsername(@Param("p") String piece);
 }

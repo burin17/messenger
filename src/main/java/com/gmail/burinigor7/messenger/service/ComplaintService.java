@@ -18,8 +18,9 @@ public class ComplaintService {
     }
 
     public boolean complaint(User holder, User target) {
-        if(complaintRepository.findByHolderAndTarget(holder, target) != null)
+        if (complaintRepository.findByHolderAndTarget(holder, target) != null) {
             return false;
+        }
         complaintRepository.save(new Complaint(holder, target));
         return true;
     }

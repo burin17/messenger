@@ -40,7 +40,7 @@ public class RegistrationController {
     public String processRegistration(@Valid @ModelAttribute("form") RegistrationDTO registrationDTO,
                                       BindingResult bindingResult) throws InterruptedException {
         registrationValidator.validate(registrationDTO, bindingResult);
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "/registration";
         }
         try {

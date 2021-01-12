@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     Complaint findByHolderAndTarget(User holder, User target);
+
     List<Complaint> findAllByTarget(User target);
 }

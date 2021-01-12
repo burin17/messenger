@@ -28,7 +28,7 @@ public class MessageController {
 
     @GetMapping("/{id}")
     public String dialogPage(@PathVariable("id") User recipient, Model model) {
-        if(recipient.getId().equals(messageService.selfProfile().getId())) {
+        if (recipient.getId().equals(messageService.selfProfile().getId())) {
             return "redirect:/profile/self";
         }
         User sender = messageService.selfProfile();

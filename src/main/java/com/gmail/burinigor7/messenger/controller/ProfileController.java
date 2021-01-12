@@ -64,8 +64,8 @@ public class ProfileController {
         model.addAttribute("profile", profile);
         model.addAttribute("complaintPossibility",
                 !isSelf &&
-                profile.getRole() == Role.USER &&
-                authenticated.getRole() == Role.USER);
+                        profile.getRole() == Role.USER &&
+                        authenticated.getRole() == Role.USER);
         return "profile";
     }
 

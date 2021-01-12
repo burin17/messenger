@@ -24,9 +24,11 @@ public class RegistrationValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         RegistrationDTO form = (RegistrationDTO) target;
-        if(!form.getPassword().equals(form.getPasswordConfirmation()))
+        if (!form.getPassword().equals(form.getPasswordConfirmation())) {
             errors.rejectValue("passwordConfirmation", "", "Passwords don't match");
-        if(userRepository.findByUsername(form.getUsername()).isPresent())
+        }
+        if (userRepository.findByUsername(form.getUsername()).isPresent()) {
             errors.rejectValue("username", "", "Username already in use");
+        }
     }
 }

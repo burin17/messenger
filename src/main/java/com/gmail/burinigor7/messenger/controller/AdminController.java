@@ -37,17 +37,18 @@ public class AdminController {
 
     @GetMapping("/profile/edit/{id}")
     public String editProfilePage(@PathVariable("id") User profile, Model model) {
-        if(profile.getRole() == Role.USER) {
+        if (profile.getRole() == Role.USER) {
             model.addAttribute("profile", profile);
             return "profile_edit";
-        } return "redirect:/profile/" + profile.getId();
+        }
+        return "redirect:/profile/" + profile.getId();
     }
 
     @PostMapping("/profile/edit/{id}")
     public String editProfileAction(@Valid @ModelAttribute("profile") EditProfileDTO editProfileDTO,
                                     @PathVariable("id") User user,
                                     BindingResult bindingResult) {
-        if(user.getRole() == Role.USER) {
+        if (user.getRole() == Role.USER) {
             editProfileDTO.setId(user.getId());
             return profileService.editUser(editProfileDTO, user, bindingResult);
         }
@@ -59,7 +60,7 @@ public class AdminController {
                          @PathVariable("id2") User user2,
                          Model model) {
         List<Message> dialog = messageService.getDialog(user1,
-                                                        user2);
+                user2);
         model.addAttribute("dialog", dialog);
         model.addAttribute("user1", user1);
         model.addAttribute("user2", user2);

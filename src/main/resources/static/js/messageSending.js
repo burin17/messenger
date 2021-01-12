@@ -4,7 +4,7 @@ const conversation = document.getElementById("conversation")
 const fileInput = document.getElementById("msg-file");
 const fileName =  document.getElementById('file-name');
 let messages = document.getElementsByClassName('message-body');
-
+let stompClient;
 sendButton.addEventListener('click', (e) => {
     sendMessage();
 });
@@ -42,7 +42,7 @@ const sendMessage = async () => {
                     </div>
                 </div>
             </div>`
-        } else
+        } else {
             conversation.innerHTML +=
                 `<div class="row message-body" >
                 <div class="col message-main-sender">
@@ -56,6 +56,7 @@ const sendMessage = async () => {
                     </div>
                 </div>
             </div>`
+        }
         addFileLink()
         textarea.value = "";
         stompClient.send("/chat/" + message.dialog.id, {}, JSON.stringify(message.id));
@@ -64,8 +65,6 @@ const sendMessage = async () => {
     }
 }
 
-let stompClient = null;
-
 function connect() {
     let socket = new SockJS('/chat');
     stompClient = Stomp.over(socket);
@@ -73,7 +72,7 @@ function connect() {
         stompClient.subscribe('/topic/messages/' + dialog, function(resp) {
             let message = JSON.parse(resp.body);
             if(message.sender.id == recipient) {
-                if(message.fileName != null)
+                if(message.fileName != null) {
                     conversation.innerHTML +=
                         `<div class="row message-body" >
                             <div class="col message-main-receiver">
@@ -91,8 +90,9 @@ function connect() {
                                 </div>
                             </div>
                         </div>`
-                else conversation.innerHTML +=
-                    `<div class="row message-body" >
+                } else {
+                    conversation.innerHTML +=
+                        `<div class="row message-body" >
                             <div class="col message-main-receiver">
                                 <div class="receiver">
                                     <div class="message-text">
@@ -104,6 +104,7 @@ function connect() {
                                 </div>
                             </div>
                         </div>`
+                }
                 addFileLink();
             }
         });
@@ -128,10 +129,11 @@ const downloadFile = async (fileName, originalName) => {
 function addFileLink() {
     for(let message of messages) {
         let link = message.querySelector('.file-ref');
-        if(link != null)
+        if(link != null) {
             link.addEventListener('click', () => {
                 downloadFile(message.querySelector('.server-file-name').innerText, link.innerText);
             });
+        }
     }
 }
 
@@ -142,4 +144,5 @@ window.onload = function() {
     fileInput.addEventListener('change', () => {
         sendButton.className = 'btn btn-primary col-sm-1';
     });
+    connect();
 }

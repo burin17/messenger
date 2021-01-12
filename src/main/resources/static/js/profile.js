@@ -6,10 +6,11 @@ const abc = async () => {
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const resp = await fetch(url, {method: 'POST'})
         .then(response => response.json());
-    if(resp)
+    if(resp) {
         alert('Complaint successfully sent')
-    else
+    } else {
         alert('Complaint already sent')
+    }
 }
 
 complaintBtn.addEventListener('click', abc)

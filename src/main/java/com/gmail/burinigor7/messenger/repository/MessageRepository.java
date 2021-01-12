@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    @Query(value =  "select * " +
+    @Query(value = "select * " +
             "from messages m " +
             "where (m.recipient_id = :r and m.sender_id = :s) " +
             "or (m.sender_id = :r and m.recipient_id = :s)",

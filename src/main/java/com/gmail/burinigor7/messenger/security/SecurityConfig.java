@@ -59,9 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/login")
                 .and()
-                    .sessionManagement()
-                    .maximumSessions(1)
-                    .sessionRegistry(sessionRegistry());
+                .sessionManagement()
+                .maximumSessions(1)
+                .sessionRegistry(sessionRegistry());
     }
 
     @Bean

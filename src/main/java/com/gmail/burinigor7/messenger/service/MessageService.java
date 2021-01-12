@@ -54,9 +54,9 @@ public class MessageService {
                 recipient, text,
                 dialogService.dialog(recipient)
         );
-        if(file != null) {
+        if (file != null) {
             File uploadDir = new File(uploadsPath);
-            if(!uploadDir.exists()) {
+            if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
             String fileName = UUID.randomUUID().toString() + "_"

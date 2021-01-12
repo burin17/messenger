@@ -53,8 +53,9 @@ public class Message {
     }
 
     public String getOriginalFileName() {
-        if(fileName != null)
+        if (fileName != null) {
             return fileName.substring(fileName.indexOf('_') + 1);
+        }
         return null;
     }
 

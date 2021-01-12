@@ -51,52 +51,57 @@ public class ProfileService {
 
     public List<User> getUsersByUsernamePiece(String piece) {
         List<User> users = userRepository.findAllByPieceOfUsername(piece);
-                users.forEach(user -> {
-                    user.setPassword(null);
-                    user.setRole(null);
-                    user.setLastName(null);
-                    user.setFirstName(null);
-                    user.setStatus(null);
-                });
+        users.forEach(user -> {
+            user.setPassword(null);
+            user.setRole(null);
+            user.setLastName(null);
+            user.setFirstName(null);
+            user.setStatus(null);
+        });
         return users;
     }
 
     public String editUser(Authentication authentication, EditProfileDTO editProfileDTO,
                            BindingResult bindingResult) {
         User user = selfProfile();
-        if(!updateUser(user, editProfileDTO, bindingResult))
+        if (!updateUser(user, editProfileDTO, bindingResult)) {
             return "/profile_edit_self";
-        ((SecurityUser)authentication.getPrincipal()).setUsername(user.getUsername());
+        }
+        ((SecurityUser) authentication.getPrincipal()).setUsername(user.getUsername());
         return "redirect:/profile/self";
     }
 
     public String editUser(EditProfileDTO editProfileDTO,
                            User profile,
                            BindingResult bindingResult) {
-        if(!updateUser(profile, editProfileDTO, bindingResult))
+        if (!updateUser(profile, editProfileDTO, bindingResult)) {
             return "/profile_edit";
+        }
         return "redirect:/profile/" + profile.getId();
     }
 
     private boolean updateUser(User profile, EditProfileDTO editProfileDTO,
                                BindingResult bindingResult) {
-        if(!editProfileDTO.getUsername().equals(profile.getUsername()) &&
-                userRepository.findByUsername(editProfileDTO.getUsername()).isPresent())
+        if (!editProfileDTO.getUsername().equals(profile.getUsername()) &&
+                userRepository.findByUsername(editProfileDTO.getUsername()).isPresent()) {
             bindingResult.rejectValue("username", "", "Username already in use");
-        if(editProfileDTO.getStatus() != Status.ACTIVE &&
-                editProfileDTO.getRole() == Role.ADMIN)
+        }
+        if (editProfileDTO.getStatus() != Status.ACTIVE &&
+                editProfileDTO.getRole() == Role.ADMIN) {
             bindingResult.rejectValue("status", "", "Incorrect status for ADMIN role");
-        if(bindingResult.hasErrors())
+        }
+        if (bindingResult.hasErrors()) {
             return false;
+        }
         profile.setUsername(editProfileDTO.getUsername());
         profile.setFirstName(editProfileDTO.getFirstName());
         profile.setLastName(editProfileDTO.getLastName());
-        if(editProfileDTO.getRole() != null && editProfileDTO.getStatus() != null) {
+        if (editProfileDTO.getRole() != null && editProfileDTO.getStatus() != null) {
             profile.setRole(editProfileDTO.getRole());
             profile.setStatus(editProfileDTO.getStatus());
         }
         userRepository.save(profile);
-        if(profile.getStatus() != Status.ACTIVE) {
+        if (profile.getStatus() != Status.ACTIVE) {
             sessionAndComplaintsDrop(profile);
         }
         return true;
@@ -112,7 +117,8 @@ public class ProfileService {
         sessionRegistry.getAllSessions(new SecurityUser(profile.getUsername()), false)
                 .forEach(SessionInformation::expireNow);
         List<Complaint> complaints = complaintRepository.findAllByTarget(profile);
-        for(Complaint complaint : complaints)
+        for (Complaint complaint : complaints) {
             complaintRepository.delete(complaint);
+        }
     }
 }
