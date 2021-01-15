@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="sidebar" class="bg-light border-right" id="sidebar-wrapper">
+    <div class="sidebar-heading">Messenger</div>
+    <div class="list-group list-group-flush">
+        <a th:href="@{/profile/self}" class="list-group-item list-group-item-action bg-light">My profile</a>
+        <a th:href="@{/dialog/all}" class="list-group-item list-group-item-action bg-light">Dialogs</a>
+        <a th:href="@{/profile/search}" class="list-group-item list-group-item-action bg-light">Users</a>
+        <form th:action="@{/logout}" th:method="post">
+            <button class="logout-btn list-group-item list-group-item-action bg-light" th:type="submit">Logout</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

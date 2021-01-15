@@ -1,0 +1,7 @@
+.profile-link {
+    color: #000000;
+}
+
+.profile-link:hover {
+    text-decoration: none;
+}
